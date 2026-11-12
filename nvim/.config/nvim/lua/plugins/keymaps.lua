@@ -20,7 +20,7 @@ end
 -- Oil - File explorer
 map({
 	{
-		"sf",
+		"<leader>fe",
 		function()
 			require("oil").open_float(nil, { preview = {} })
 		end,
@@ -31,13 +31,13 @@ map({
 -- LSP
 local Snacks = require("snacks")
 map({
-	-- { "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
-	-- {
-	-- 	"gr",
-	-- 	vim.lsp.buf.references,
-	-- 	desc = "References",
-	-- 	nowait = true,
-	-- },
+	{ "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
+	{
+		"gr",
+		vim.lsp.buf.references,
+		desc = "References",
+		nowait = true,
+	},
 	{
 		"gI",
 		function()
@@ -64,8 +64,8 @@ map({
 		end,
 		desc = "Goto Source Definition / Implementation",
 	},
-	-- { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
-	-- { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+	{ "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
+	{ "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
 	{
 		"gd",
 		function()
@@ -111,13 +111,13 @@ map({
 
 -- Snacks
 map({
-	{ "<leader>cl", Snacks.picker.lsp_config, desc = "Lsp Info" },
-	{ "<leader>cR", Snacks.rename.rename_file, desc = "Rename File" },
-	{ ";f", Snacks.picker.files, desc = "Find files" },
-	{ ";r", Snacks.picker.grep, desc = "Live grep" },
-	{ ";;", Snacks.picker.resume, desc = "Resume picker" },
+	{ "<leader>fl", Snacks.picker.lsp_config, desc = "Lsp Info" },
+	{ "<leader>fr", Snacks.rename.rename_file, desc = "Rename File" },
+	{ "<leader>ff", Snacks.picker.files, desc = "Find files" },
+	{ "<leader>fg", Snacks.picker.grep, desc = "Live grep" },
+	{ "<leader>f;", Snacks.picker.resume, desc = "Resume picker" },
 	{
-		"\\\\",
+		"<leader>fb",
 		function()
 			Snacks.picker.buffers({
 				confirm = function(picker, item)
@@ -144,9 +144,9 @@ map({
 		end,
 		desc = "List buffers",
 	},
-	{ ";e", Snacks.picker.diagnostics, desc = "Diagnostics" },
-	{ ";c", Snacks.picker.lsp_incoming_calls, desc = "LSP incoming calls" },
-	{ ";n", Snacks.picker.notifications, desc = "Notifications" },
+	{ "fd", Snacks.picker.diagnostics, desc = "Diagnostics" },
+	{ "fc", Snacks.picker.lsp_incoming_calls, desc = "LSP incoming calls" },
+	{ "fn", Snacks.picker.notifications, desc = "Notifications" },
 	{
 		";g",
 		function()
@@ -174,6 +174,13 @@ map({
 		end,
 		desc = "Prev Reference",
 		mode = { "n", "t" },
+	},
+	{
+		"<leader>fE",
+		function()
+			Snacks.picker.explorer()
+		end,
+		desc = "Snacks Explorer",
 	},
 })
 
@@ -254,10 +261,15 @@ map({
 -- MiniDiff
 map({
 	{
-		"<leader>gd",
+		"<leader>go",
 		function()
 			local MiniDiff = require("mini.diff")
-			MiniDiff.toggle_overlay()
+			if vim.b.minidiff_summary ~= nil then
+				MiniDiff.toggle_overlay(0)
+			else
+				-- Optionally enable it or safely ignore
+				print("mini.diff is not enabled for this buffer")
+			end
 		end,
 		desc = "Toggle MiniDiff overlay",
 	},

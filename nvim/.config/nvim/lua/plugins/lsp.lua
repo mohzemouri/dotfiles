@@ -2,6 +2,8 @@ require("mason").setup()
 require("mason-tool-installer").setup({
 	ensure_installed = {
 		"tree-sitter-cli",
+		"emmet-language-server",
+		"css-lsp",
 		"lua-language-server",
 		"prettier",
 		"prettierd",
@@ -16,6 +18,7 @@ require("mason-tool-installer").setup({
 		"vtsls",
 		"copilot-language-server",
 		"rust-analyzer",
+		"glsl_analyzer",
 	},
 	auto_update = false,
 	run_on_start = true,
@@ -42,4 +45,5 @@ vim.lsp.enable({
 	"tailwindcss",
 	"glsl_analyzer",
 	"rust_analyzer",
+"emmet_language_server",
 })

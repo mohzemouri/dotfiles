@@ -1,6 +1,5 @@
 -- File explorer
 require("oil").setup({
-	default_file_explorer = true,
 	columns = {
 		"icon",
 		{ "permissions", highlight = "Type" },
@@ -33,6 +32,7 @@ require("oil").setup({
 
 require("copilot").setup({
 	suggestion = {
+		enabled = false,
 		auto_trigger = true,
 		keymap = {
 			accept = "<C-l>",

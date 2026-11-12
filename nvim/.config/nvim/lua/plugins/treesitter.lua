@@ -1,6 +1,9 @@
 local TS = require("nvim-treesitter")
 
-if vim.fn.has("win32") == 1 and vim.fn.executable("cl.exe") == 0 then
+-- Force nvim-treesitter to use gcc on Windows if cl.exe isn't present
+if vim.fn.has("win32") == 1 and vim.fn.executable("clang.exe") == 0 then
+	require("nvim-treesitter.install").compilers = { "gcc" }
+	-- Optional fallback environment override
 	vim.env.CC = "gcc"
 end
 

@@ -1,0 +1,7 @@
+{
+  "Local Function": {
+    "prefix": "lfn",
+    "body": ["local function ${1:name}(${2:args})", "\t$0", "end"],
+    "description": "Create a local Neovim Lua function"
+  }
+}

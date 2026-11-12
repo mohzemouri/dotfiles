@@ -4,13 +4,22 @@
       "rev": "bd9ad214eaeefec5f937cb49effc3c0ffb2f57ac",
       "src": "https://github.com/RRethy/base16-nvim"
     },
+    "blink-copilot": {
+      "rev": "7ad8209b2f880a2840c94cdcd80ab4dc511d4f39",
+      "src": "https://github.com/fang2hou/blink-copilot"
+    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
+    "blink.compat": {
+      "rev": "2ed6d9a28b07fa6f3bface818470605f8896408c",
+      "src": "https://github.com/saghen/blink.compat",
+      "version": "2.0.0 - 3.0.0"
+    },
     "bufferline.nvim": {
-      "rev": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3",
+      "rev": "eba37af2699143efe7a8b1ffc57bf31756b73100",
       "src": "https://github.com/akinsho/bufferline.nvim"
     },
     "codediff.nvim": {
@@ -22,16 +31,24 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "192b297ef37d9f6a8b889c07fb9a3dd16f1cb86f",
+      "rev": "1d674b416df08e5c54e442503b7703a0df462acf",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
+    "friendly-snippets": {
+      "rev": "7a1c9f7897a4eb078b157a04c7af81e5869215b1",
+      "src": "https://github.com/rafamadriz/friendly-snippets"
+    },
     "gitlinker.nvim": {
-      "rev": "0a2da18a31d9bff9e7f9cae79a63b3f48364d041",
+      "rev": "617ca52c60a30ed75cb46406d1ac018d9d7ca57c",
       "src": "https://github.com/linrongbin16/gitlinker.nvim"
     },
     "gitsigns.nvim": {
       "rev": "ef707fb93301a9b856f36eae4c8f56f5b988a794",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "incline.nvim": {
+      "rev": "debd628e9395f7a9da57bdc31ce75ca6b40a880b",
+      "src": "https://github.com/b0o/incline.nvim"
     },
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
@@ -63,11 +80,11 @@
       "src": "https://github.com/brenoprata10/nvim-highlight-colors"
     },
     "nvim-lspconfig": {
-      "rev": "d5c7e7bcc15bccc01bf1601a03473e10de2f0f7e",
+      "rev": "993d048db0d83d8e8ba3f9cb376456321acdcce3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "915f2bd3d4e2a33704bfc476b5137e9befa82f3d",
+      "rev": "19bdfc04f40ed2ccb3340591d125f759b0406875",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "oil.nvim": {

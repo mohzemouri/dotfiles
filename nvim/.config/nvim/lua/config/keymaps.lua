@@ -2,32 +2,40 @@ local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
 -- Do things without updating the registers
-keymap.set("n", "x", '"_x')
-keymap.set("n", "<Leader>p", '"2p')
-keymap.set("n", "<Leader>P", '"2P')
-keymap.set("v", "<Leader>p", '"2p')
-keymap.set("n", "<Leader>c", '"_c')
-keymap.set("n", "<Leader>C", '"_C')
-keymap.set("v", "<Leader>c", '"_c')
-keymap.set("v", "<Leader>C", '"_C')
-keymap.set("n", "<Leader>d", '"_d')
-keymap.set("n", "<Leader>D", '"_D')
-keymap.set("v", "<Leader>d", '"_d')
-keymap.set("v", "<Leader>D", '"_D')
+--
+-- Delete a single character without overwriting the default register
+keymap.set("n", "x", '"_x', { desc = "Delete character into black hole register" })
+
+-- Paste from the yank register (prevents deleted text from overwriting what you just yanked)
+keymap.set("n", "<leader>p", '"0p', { desc = "Paste last yanked text below" })
+keymap.set("n", "<leader>P", '"0P', { desc = "Paste last yanked text above" })
+keymap.set("v", "<leader>p", '"0p', { desc = "Paste last yanked text over selection" })
+
+-- Change text without overwriting the default register
+keymap.set("n", "<leader>c", '"_c', { desc = "Change motion into black hole register" })
+keymap.set("n", "<leader>C", '"_C', { desc = "Change to end of line into black hole register" })
+keymap.set("v", "<leader>c", '"_c', { desc = "Change selection into black hole register" })
+keymap.set("v", "<leader>C", '"_C', { desc = "Change selection into black hole register" })
+
+-- Delete text without overwriting the default register
+keymap.set("n", "<leader>d", '"_d', { desc = "Delete motion into black hole register" })
+keymap.set("n", "<leader>D", '"_D', { desc = "Delete to end of line into black hole register" })
+keymap.set("v", "<leader>d", '"_d', { desc = "Delete selection into black hole register" })
+keymap.set("v", "<leader>D", '"_D', { desc = "Delete selection into black hole register" })
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
 keymap.set("n", "-", "<C-x>")
 
 -- Delete a word backwards
-keymap.set("n", "dw", 'vb"_d')
+keymap.set("n", "db", 'vb"_d')
 
 -- Select all
 keymap.set("n", "<C-a>", "gg<S-v>G")
 
 -- Disable continuations
-keymap.set("n", "<Leader>o", "o<Esc>^Da", opts)
-keymap.set("n", "<Leader>O", "O<Esc>^Da", opts)
+keymap.set("n", "o", "o<Esc>^Da", opts)
+keymap.set("n", "O", "O<Esc>^Da", opts)
 
 -- Jumplist
 keymap.set("n", "<C-m>", "<C-i>", opts)
@@ -37,20 +45,18 @@ keymap.set("n", "te", ":tabedit<CR>")
 keymap.set("n", "<tab>", ":tabnext<CR>", opts)
 keymap.set("n", "<s-tab>", ":tabprev<CR>", opts)
 -- Split window
-keymap.set("n", "ss", ":split<Return>", opts)
-keymap.set("n", "sv", ":vsplit<Return>", opts)
+keymap.set("n", "<leader>ss", ":split<Return>", opts)
+keymap.set("n", "<leader>sv", ":vsplit<Return>", opts)
 -- Move window
-keymap.set("n", "sh", "<C-w>h")
-keymap.set("n", "sk", "<C-w>k")
-keymap.set("n", "sj", "<C-w>j")
-keymap.set("n", "sl", "<C-w>l")
+keymap.set("n", "<C-h>", "<C-w>h")
+keymap.set("n", "<C-k>", "<C-w>k")
+keymap.set("n", "<C-j>", "<C-w>j")
+keymap.set("n", "<C-l>", "<C-w>l")
 
--- Toggle inlay hints natively (Neovim 0.10+)
+-- Toggle inlay hints
 keymap.set("n", "<leader>i", function()
-	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+	require("lsp").toggleInlayHints()
 end)
-
-keymap.set("n", "<leader>fE", ":Lexplore<CR>", { silent = true, desc = "Toggle file explorer" })
 
 -- Yank current file path
 keymap.set("n", "<leader>yf", function()

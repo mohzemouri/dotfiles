@@ -1,20 +1,8 @@
-local icons = NvUtils.icons
-local lualine_utils = require("utils.lualine")
+local icons = require("utils.icons")
 local lazygit_utils = require("utils.lazygit")
-
--- require("solarized-osaka").setup({
---	style = "vivid",
---	transparent = true,
---})
---vim.cmd.colorscheme("solarized-osaka")
 
 require("mini.icons").setup()
 require("mini.icons").mock_nvim_web_devicons()
-
--- Custom tabline setup
-require("utils.tabline").setup()
-vim.o.showtabline = 1
-vim.o.tabline = "%!v:lua.require('utils.tabline').render()"
 
 require("snacks").setup({
 	indent = { enabled = true },
@@ -49,113 +37,6 @@ require("snacks").setup({
 require("tiny-cmdline").setup({
 	position = {
 		y = "20%",
-	},
-})
-
-require("bufferline").setup({})
-
-require("lualine").setup({
-	options = {
-		theme = "base16",
-		globalstatus = true,
-		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
-		refresh = {
-			events = {
-				"WinEnter",
-				"BufEnter",
-				"BufWritePost",
-				"SessionLoadPost",
-				"FileChangedShellPost",
-				"VimResized",
-				"Filetype",
-				"CursorMoved",
-				"CursorMovedI",
-				"ModeChanged",
-				-- Macro
-				"RecordingEnter",
-				"RecordingLeave",
-			},
-		},
-	},
-	sections = {
-		lualine_a = { "mode" },
-		lualine_b = { "branch" },
-
-		lualine_c = {
-			lualine_utils.root_dir(),
-			--	{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-			{
-				"filetype",
-				colored = true, -- Displays filetype icon in color if set to true
-				icon_only = false, -- Display only an icon for filetype
-				icon = { align = "left" }, -- Display filetype icon on the right hand side
-				-- icon =    {'X', align='right'}
-				-- Icon string ^ in table is ignored in filetype component
-			},
-			{
-				"filename",
-				file_status = true, -- Displays file status (readonly status, modified status)
-				newfile_status = true, -- Display new file status (new file means no write after created)
-				path = 1, -- 0: Just the filename
-				-- 1: Relative path
-				-- 2: Absolute path
-				-- 3: Absolute path, with tilde as the home directory
-				-- 4: Filename and parent dir, with tilde as the home directory
-
-				shorting_target = 40, -- Shortens path to leave 40 spaces in the window
-				-- for other components. (terrible name, any suggestions?)
-				-- It can also be a function that returns
-				-- the value of `shorting_target` dynamically.
-				symbols = {
-					modified = "[+]", -- Text to show when the file is modified.
-					readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
-					unnamed = "[No Name]", -- Text to show for unnamed buffers.
-					newfile = "[New]", -- Text to show for newly created file before first write
-				},
-			},
-			--{
-			--	lualine_utils.pretty_path({
-			--		relative = "cwd",
-			--		modified_hl = "MatchParen",
-			--		directory_hl = "",
-			--		filename_hl = "Bold",
-			--		modified_sign = "",
-			--		readonly_icon = " 󰌾 ",
-			--	}),
-			--},
-		},
-		lualine_x = {
-			lualine_utils.macro_recording(),
-			{
-				"diagnostics",
-				symbols = {
-					error = icons.diagnostics.Error,
-					warn = icons.diagnostics.Warn,
-					info = icons.diagnostics.Info,
-					hint = icons.diagnostics.Hint,
-				},
-			},
-			{
-				"diff",
-				symbols = { added = " ", modified = "󰝤 ", removed = " " },
-				source = function()
-					local gitsigns = vim.b.gitsigns_status_dict
-					if gitsigns then
-						return {
-							added = gitsigns.added,
-							modified = gitsigns.changed,
-							removed = gitsigns.removed,
-						}
-					end
-				end,
-			},
-		},
-		lualine_y = {
-			{ "progress", separator = " ", padding = { left = 1, right = 1 } },
-		},
-		lualine_z = {
-			{ "location", padding = { left = 1, right = 1 } },
-		},
 	},
 })
 
@@ -198,34 +79,4 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
 		},
 	},
-})
-
--- Initialize which-key with clean defaults
-local wk = require("which-key")
-
-wk.setup({
-	preset = "helix", -- "classic" | "modern" | "helix"
-	delay = 300, -- Time (ms) to wait before the popup shows up
-	icons = {
-		breadcrumb = "»",
-		separator = "➜",
-		group = "+",
-	},
-})
-
--- Register and document keymap groups using the modern .add() API
-wk.add({
-	-- Document top-level leader categories
-	{ "<leader>b", group = "Buffer..." },
-
-	-- You can document existing keys or map them cleanly inside here:
-	{ "<leader>bp", "<cmd>BufferLineTogglePin<cr>", desc = "Toggle Pin" },
-	{ "<leader>bP", "<cmd>BufferLineGroupClose ungrouped<cr>", desc = "Delete Non-Pinned" },
-	{ "<leader>bo", "<cmd>BufferLineCloseOthers<cr>", desc = "Delete Others" },
-	{ "<leader>br", "<cmd>BufferLineCloseRight<cr>", desc = "Delete Right" },
-	{ "<leader>bl", "<cmd>BufferLineCloseLeft<cr>", desc = "Delete Left" },
-
-	-- Add other prefixes as your configuration grows
-	{ "<leader>f", group = "File/Find..." },
-	{ "<leader>g", group = "Git..." },
 })

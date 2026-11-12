@@ -28,7 +28,8 @@ local nvim_server = 'nvim --server "$NVIM"'
 
 -- Refocus the launch pane from inside lazygit's terminal. `<Cmd>` runs in any
 -- mode, and long brackets keep the single/double quotes free of escaping.
-local focus_launch_pane = nvim_server .. [[ --remote-send '<Cmd>lua require("utils.lazygit").focus_origin()<CR>']]
+local focus_launch_pane = nvim_server
+	.. [[ --remote-send '<Cmd>lua require("craftzdog.utils.lazygit").focus_origin()<CR>']]
 
 --- Builds a lazygit `os.edit` / `os.editAtLine` command (fish syntax) that opens
 --- the selected file in the pane lazygit was launched from rather than a new
