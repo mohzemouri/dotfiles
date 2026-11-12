@@ -4,7 +4,7 @@ end
 
 vim.pack.add({
 	-- UI
-	-- { src = gh("craftzdog/solarized-osaka.nvim") },
+	{ src = gh("RRethy/base16-nvim") },
 	{ src = gh("nvim-mini/mini.icons") },
 	{ src = gh("folke/snacks.nvim") },
 	{ src = gh("folke/trouble.nvim") },
@@ -37,7 +37,7 @@ vim.pack.add({
 	{ src = gh("fang2hou/blink-copilot") },
 })
 
-if #vim.api.nvim_get_runtime_file("lua/craftzdog/plugins/local.lua", false) > 0 then
+if #vim.api.nvim_get_runtime_file("lua/plugins/local.lua", false) > 0 then
 	require("plugins.local")
 end
 
