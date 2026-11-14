@@ -20,7 +20,7 @@ end
 -- Oil - File explorer
 map({
 	{
-		"<leader>fe",
+		"<leader>e",
 		function()
 			require("oil").open_float(nil, { preview = {} })
 		end,
@@ -29,15 +29,16 @@ map({
 })
 
 -- LSP
-local Snacks = require("snacks")
 map({
-	{ "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
 	{
-		"gr",
-		vim.lsp.buf.references,
-		desc = "References",
-		nowait = true,
+		"<leader>cl",
+		function()
+			require("snacks").picker.lsp_config()
+		end,
+		desc = "Lsp Info",
 	},
+	{ "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
+	{ "gr", vim.lsp.buf.references, desc = "References", nowait = true },
 	{
 		"gI",
 		function()
@@ -66,24 +67,9 @@ map({
 	},
 	{ "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
 	{ "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-	{
-		"gd",
-		function()
-			Snacks.picker.lsp_definitions({ jump = { reuse_win = false } })
-		end,
-		desc = "LSP Goto Definition",
-	},
-	{ "gD", Snacks.picker.lsp_declarations, desc = "LSP Goto Declaration" },
-	{ "gy", Snacks.picker.lsp_type_definitions, desc = "LSP Goto T[y]pe Definition" },
-	{ "gr", Snacks.picker.lsp_references, desc = "LSP Goto Definition" },
 	{ "K", vim.lsp.buf.hover, desc = "Hover" },
 	{ "gK", vim.lsp.buf.signature_help, desc = "Signature Help" },
-	{
-		"<c-k>",
-		vim.lsp.buf.signature_help,
-		desc = "Signature Help",
-		mode = "i",
-	},
+	{ "<c-k>", vim.lsp.buf.signature_help, desc = "Signature Help", mode = "i" },
 	{
 		"<c-j>",
 		function()
@@ -92,15 +78,12 @@ map({
 		desc = "Jump to next diagnostic",
 		mode = "n",
 	},
-	{
-		"<leader>ca",
-		vim.lsp.buf.code_action,
-		desc = "Code Action",
-		mode = { "n", "x" },
-	},
+	{ "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" } },
+	{ "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" } },
+	{ "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" } },
 	{ "<leader>cr", vim.lsp.buf.rename, desc = "Rename" },
 	{
-		"<leader>f",
+		"<leader>ft",
 		function()
 			require("conform").format()
 		end,
@@ -111,22 +94,71 @@ map({
 
 -- Snacks
 map({
-	{ "<leader>fl", Snacks.picker.lsp_config, desc = "Lsp Info" },
-	{ "<leader>fr", Snacks.rename.rename_file, desc = "Rename File" },
-	{ "<leader>ff", Snacks.picker.files, desc = "Find files" },
-	{ "<leader>fg", Snacks.picker.grep, desc = "Live grep" },
-	{ "<leader>f;", Snacks.picker.resume, desc = "Resume picker" },
+	{
+		"<leader>fd",
+		function()
+			require("snacks").picker.lsp_definitions({ jump = { reuse_win = false } })
+		end,
+		desc = "LSP Goto Definition",
+	},
+	{
+		"<leader>fr",
+		function()
+			require("snacks").picker.lsp_references()
+		end,
+		desc = "LSP References",
+	},
+	{
+		"<leader>fD",
+		function()
+			require("snacks").picker.lsp_declarations()
+		end,
+		desc = "LSP Goto Declaration",
+	},
+	{
+		"<leader>fy",
+		function()
+			require("snacks").picker.lsp_type_definitions()
+		end,
+		desc = "LSP Goto T[y]pe Definition",
+	},
+	{
+		"<leader>fR",
+		function()
+			require("snacks").rename.rename_file()
+		end,
+		desc = "Rename File",
+	},
+	{
+		"<leader>ff",
+		function()
+			require("snacks").picker.files()
+		end,
+		desc = "Find files",
+	},
+	{
+		"<leader>fg",
+		function()
+			require("snacks").picker.grep()
+		end,
+		desc = "Live grep",
+	},
+	{
+		"<leader>f;",
+		function()
+			require("snacks").picker.resume()
+		end,
+		desc = "Resume picker",
+	},
 	{
 		"<leader>fb",
 		function()
-			Snacks.picker.buffers({
+			require("snacks").picker.buffers({
 				confirm = function(picker, item)
 					picker:close()
 					if not item then
 						return
 					end
-					-- If the buffer is already shown in a window (any tab),
-					-- jump to that window instead of opening it here.
 					vim.schedule(function()
 						for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
 							for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
@@ -144,41 +176,54 @@ map({
 		end,
 		desc = "List buffers",
 	},
-	{ "fd", Snacks.picker.diagnostics, desc = "Diagnostics" },
-	{ "fc", Snacks.picker.lsp_incoming_calls, desc = "LSP incoming calls" },
-	{ "fn", Snacks.picker.notifications, desc = "Notifications" },
 	{
-		";g",
+		"<leader>fx",
+		function()
+			require("snacks").picker.diagnostics()
+		end,
+		desc = "Diagnostics",
+	},
+	{
+		"<leader>fc",
+		function()
+			require("snacks").picker.lsp_incoming_calls()
+		end,
+		desc = "LSP incoming calls",
+	},
+	{
+		"<leader>fn",
+		function()
+			require("snacks").picker.notifications()
+		end,
+		desc = "Notifications",
+	},
+	{
+		"<leader>gl",
 		function()
 			require("utils.lazygit").open()
 		end,
 		desc = "Lazygit",
 	},
 	{
-		";h",
-		Snacks.picker.git_diff,
-		desc = "Git Diff (Hunks)",
-	},
-	{
-		"]]",
+		"<m-n>",
 		function()
-			Snacks.words.jump(vim.v.count1)
+			require("snacks").words.jump(vim.v.count1)
 		end,
 		desc = "Next Reference",
 		mode = { "n", "t" },
 	},
 	{
-		"[[",
+		"<m-p>",
 		function()
-			Snacks.words.jump(-vim.v.count1)
+			require("snacks").words.jump(-vim.v.count1)
 		end,
 		desc = "Prev Reference",
 		mode = { "n", "t" },
 	},
 	{
-		"<leader>fE",
+		"<leader>E",
 		function()
-			Snacks.picker.explorer()
+			require("snacks").picker.explorer()
 		end,
 		desc = "Snacks Explorer",
 	},
@@ -201,7 +246,7 @@ map({
 		desc = "Blame buffer",
 	},
 	{
-		"<leader>go",
+		"<leader>gp",
 		function()
 			local async = require("gitsigns.async")
 			local cache = require("gitsigns.cache").cache
@@ -250,6 +295,13 @@ map({
 		desc = "Toggle stage buffer",
 	},
 	{
+		"<leader>gd",
+		function()
+			require("snacks").picker.git_diff()
+		end,
+		desc = "Git Diff (Hunks)",
+	},
+	{
 		"<leader>gh",
 		function()
 			require("gitsigns").stage_hunk()
@@ -267,8 +319,7 @@ map({
 			if vim.b.minidiff_summary ~= nil then
 				MiniDiff.toggle_overlay(0)
 			else
-				-- Optionally enable it or safely ignore
-				print("mini.diff is not enabled for this buffer")
+				vim.notify("mini.diff is not enabled for this buffer", vim.log.levels.INFO)
 			end
 		end,
 		desc = "Toggle MiniDiff overlay",
@@ -277,8 +328,7 @@ map({
 
 -- CodeDiff
 map({
-	{ "<leader>dv", "<cmd>CodeDiff<cr>", desc = "Toggle CodeDiff" },
-	-- File history
-	{ "<leader>dh", "<cmd>CodeDiff history %<cr>", desc = "File history (current file)" },
-	{ "<leader>dH", "<cmd>CodeDiff history<cr>", desc = "File history (repo)" },
+	{ "<leader>cdv", "<cmd>CodeDiff<cr>", desc = "Toggle CodeDiff" },
+	{ "<leader>cdh", "<cmd>CodeDiff history %<cr>", desc = "File history (current file)" },
+	{ "<leader>cdH", "<cmd>CodeDiff history<cr>", desc = "File history (repo)" },
 })
