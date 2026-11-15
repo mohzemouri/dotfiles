@@ -12,14 +12,32 @@ local function set_transparent()
 		"MsgArea", -- Command-line and message area at the bottom
 	}
 
-	-- Loop through each highlight group and set its background to transparent ("none")
 	for _, group in ipairs(groups) do
 		vim.api.nvim_set_hl(0, group, { bg = "none" })
 	end
 end
 
+-- Custom highlights specifically for Matugen (Base16)
+local function apply_matugen_highlights()
+	local base16_ok, base16 = pcall(require, "base16-colorscheme")
+	if not base16_ok or not base16.colors then
+		return
+	end
+
+	local c = base16.colors
+	local hi = function(group, opts)
+		vim.api.nvim_set_hl(0, group, opts)
+	end
+
+	-- Apply transparency + custom Base16 palette overrides
+	set_transparent()
+	hi("Normal", { fg = c.base05, bg = "NONE" })
+	hi("NormalNC", { fg = c.base05, bg = "NONE" })
+	hi("Comment", { fg = c.base03, italic = true })
+	hi("CursorLine", { bg = c.base01 })
+end
+
 -- Automatically re-apply transparency whenever a Catppuccin colorscheme is loaded
--- (e.g., if you manually run :colorscheme catppuccin-mocha or catppuccin-latte later)
 vim.api.nvim_create_autocmd("ColorScheme", {
 	pattern = "catppuccin*",
 	callback = set_transparent,
@@ -29,11 +47,20 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 local ok, matugen = pcall(require, "matugen")
 
 if ok then
-	-- If matugen is installed (e.g., on Linux), initialize it with its own colors
+	-- Re-apply Matugen highlights automatically if you reload your theme live
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		pattern = "*",
+		callback = function()
+			if not (vim.g.colors_name and vim.g.colors_name:match("^catppuccin")) then
+				apply_matugen_highlights()
+			end
+		end,
+	})
+
 	matugen.setup()
+	apply_matugen_highlights()
 else
-	-- Fallback when matugen is unavailable (e.g., on Windows):
-	-- Load the built-in Catppuccin theme and make its background transparent
+	-- Fallback when matugen is unavailable:
 	vim.cmd.colorscheme("catppuccin")
 	set_transparent()
 end

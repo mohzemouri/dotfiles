@@ -66,6 +66,8 @@ require("lualine").setup({
 			},
 		},
 		lualine_x = {
+			"keymap", -- Displays the active keymap name
+			"encoding",
 			lualine_utils.macro_recording(),
 			{
 				"diagnostics",
