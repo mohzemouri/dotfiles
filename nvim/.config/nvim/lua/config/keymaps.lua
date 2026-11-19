@@ -7,21 +7,21 @@ local opts = { noremap = true, silent = true }
 keymap.set("n", "x", '"_x', { desc = "Delete character into black hole register" })
 
 -- Paste from the yank register (prevents deleted text from overwriting what you just yanked)
-keymap.set("n", "<leader>p", '"0p', { desc = "Paste last yanked text below" })
-keymap.set("n", "<leader>P", '"0P', { desc = "Paste last yanked text above" })
-keymap.set("v", "<leader>p", '"0p', { desc = "Paste last yanked text over selection" })
+keymap.set("n", ";p", '"0p', { desc = "Paste last yanked text below" })
+keymap.set("n", ";P", '"0P', { desc = "Paste last yanked text above" })
+keymap.set("v", ";p", '"0p', { desc = "Paste last yanked text over selection" })
 
 -- Change text without overwriting the default register
-keymap.set("n", "<leader>c", '"_c', { desc = "Change motion into black hole register" })
-keymap.set("n", "<leader>C", '"_C', { desc = "Change to end of line into black hole register" })
-keymap.set("v", "<leader>c", '"_c', { desc = "Change selection into black hole register" })
-keymap.set("v", "<leader>C", '"_C', { desc = "Change selection into black hole register" })
+keymap.set("n", ";c", '"_c', { desc = "Change motion into black hole register" })
+keymap.set("n", ";C", '"_C', { desc = "Change to end of line into black hole register" })
+keymap.set("v", ";c", '"_c', { desc = "Change selection into black hole register" })
+keymap.set("v", ";C", '"_C', { desc = "Change selection into black hole register" })
 
 -- Delete text without overwriting the default register
-keymap.set("n", "<leader>d", '"_d', { desc = "Delete motion into black hole register" })
-keymap.set("n", "<leader>D", '"_D', { desc = "Delete to end of line into black hole register" })
-keymap.set("v", "<leader>d", '"_d', { desc = "Delete selection into black hole register" })
-keymap.set("v", "<leader>D", '"_D', { desc = "Delete selection into black hole register" })
+keymap.set("n", ";d", '"_d', { desc = "Delete motion into black hole register" })
+keymap.set("n", ";D", '"_D', { desc = "Delete to end of line into black hole register" })
+keymap.set("v", ";d", '"_d', { desc = "Delete selection into black hole register" })
+keymap.set("v", ";D", '"_D', { desc = "Delete selection into black hole register" })
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
@@ -75,11 +75,6 @@ keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
--- Toggle inlay hints
-keymap.set("n", "<leader>i", function()
-	require("lsp").toggleInlayHints()
-end)
-
 -- Yank current file path
 keymap.set("n", "<leader>yf", function()
 	require("utils.editor").yank_relative_path_with_line()
@@ -89,12 +84,22 @@ keymap.set("n", "<leader>yp", function()
 	require("utils.editor").yank_absolute_path_with_line()
 end, { desc = "Yank absolute path with line number" })
 
-keymap.set("v", "<leader>cc", ":<C-u>lua require('utils.editor').copy_as_codeblock()<CR>")
+keymap.set("v", "<leader>yc", ":<C-u>lua require('utils.editor').copy_as_codeblock()<CR>")
 
 keymap.set("n", "<leader>j", function()
 	require("utils.editor").open_package_json()
 end, { desc = "Open package.json in floating window" })
 
-keymap.set("n", "<leader>bd", function()
-	require("utils.editor").delete_hidden_buffers()
-end, { desc = "Delete hidden buffers" })
+keymap.set("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Toggle Pin" })
+keymap.set("n", "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete Non-Pinned Buffers" })
+keymap.set("n", "<leader>br", "<Cmd>BufferLineCloseRight<CR>", { desc = "Delete Buffers to the Right" })
+keymap.set("n", "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", { desc = "Delete Buffers to the Left" })
+keymap.set("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev Buffer" })
+keymap.set("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next Buffer" })
+keymap.set("n", "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev Buffer" })
+keymap.set("n", "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next Buffer" })
+keymap.set("n", "[B", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer prev" })
+keymap.set("n", "]B", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer next" })
+keymap.set("n", "<leader>bj", "<cmd>BufferLinePick<cr>", { desc = "Pick Buffer" })
+-- buffer delete
+keymap.set("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete Buffer" })
