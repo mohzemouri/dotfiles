@@ -15,6 +15,8 @@ require("modules.autostart")
 require("modules.env")
 require("modules.permissions")
 require("modules.looknfeel")
+require("modules.rules")
+require("modules.animation")
 
 ----------------
 ----  MISC  ----

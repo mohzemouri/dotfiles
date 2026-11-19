@@ -25,10 +25,10 @@ STOW_DIRS=(
   noctalia
 )
 
-echo "Installing required packages via pacman..."
+printf "Installing required packages via pacman...\n"
 sudo pacman -S --needed --noconfirm "${PACKAGES[@]}"
 
-echo "Configuring /etc/zsh/zshenv for XDG_CONFIG_HOME and ZDOTDIR..."
+printf "\nConfiguring /etc/zsh/zshenv for XDG_CONFIG_HOME and ZDOTDIR...\n"
 sudo mkdir -p /etc/zsh
 sudo tee /etc/zsh/zshenv >/dev/null <<'EOF'
 if [[ -z "$XDG_CONFIG_HOME" ]]
@@ -42,7 +42,7 @@ then
 fi
 EOF
 
-echo "Backing up any existing configurations..."
+printf "\nBacking up any existing configurations...\n"
 backup_if_exists() {
   if [ -e "$1" ] && [ ! -L "$1" ]; then
     echo "Backing up $1 to $1.bak"
@@ -60,15 +60,18 @@ backup_if_exists "$HOME/.config/kitty"
 backup_if_exists "$HOME/.config/tmux"
 backup_if_exists "$HOME/.config/noctalia"
 
-echo "Symlinking dotfiles with GNU Stow..."
+printf "\nSymlinking dotfiles with GNU Stow...\n"
 cd "$DOTFILES_DIR"
 for dir in "${STOW_DIRS[@]}"; do
   if [ -d "$dir" ]; then
     stow -R "$dir"
+    printf "Symlinked $dir\n"
+  else
+    echo "Directory $dir does not exist in $DOTFILES_DIR, skipping..."
   fi
 done
 
-echo "Syncing Neovim plugins via vim.pack..."
+printf "\nSyncing Neovim plugins via vim.pack...\n"
 nvim --headless "+lua vim.pack.update()" +qa
 
 if [ "$SHELL" != "$(which zsh)" ]; then
@@ -76,4 +79,4 @@ if [ "$SHELL" != "$(which zsh)" ]; then
   chsh -s "$(which zsh)"
 fi
 
-echo "Setup complete! Log out and select Hyprland (or restart your terminal) to apply changes."
+printf "\n\n🥳 Setup complete! Log out and select Hyprland (or restart your terminal) to apply changes.\n"

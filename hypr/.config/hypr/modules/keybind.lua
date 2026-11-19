@@ -5,11 +5,9 @@
 -- Set programs that you use
 local terminal = "kitty"
 local fileManager = "thunar"
-local browser = "chromium"
+local browser = "zen-browser"
 local music = "spotify"
 local notion = browser .. " --app=https://notion.so"
-local launcher = "~/.config/rofi/menus/drun"
-local runner = "~/.config/rofi/menus/run"
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -17,7 +15,7 @@ local runner = "~/.config/rofi/menus/run"
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 local secondMod = "SUPER + SHIFT"
-
+local ipc = "noctalia msg "
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(fileManager))
@@ -25,17 +23,17 @@ hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(music))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(notion))
 
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))
-hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
+hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+-- hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
 
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/wallpaper.sh"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"))
 hl.bind(secondMod .. " + W", hl.dsp.exec_cmd("pkill waybar || /home/xynor/.config/waybar/Waybar/build/waybar"))
 
-hl.bind(secondMod .. " + V", hl.dsp.exec_cmd("~/.config/rofi/menus/clipboard"))
+hl.bind(secondMod .. " + V", hl.dsp.exec_cmd(ipc .. "panel-toggle clipboard"))
 hl.bind(secondMod .. " + I", hl.dsp.exec_cmd("~/.config/rofi/menus/icons"))
 
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + escape", hl.dsp.exec_cmd("~/.config/rofi/menus/logout"))
+hl.bind(mainMod .. " + escape", hl.dsp.exec_cmd(ipc .. "panel-toggle session"))
 
 hl.bind(
 	secondMod .. " + Q",
@@ -57,6 +55,8 @@ hl.bind(secondMod .. " + h", hl.dsp.window.move({ direction = "left" }))
 hl.bind(secondMod .. " + l", hl.dsp.window.move({ direction = "right" }))
 hl.bind(secondMod .. " + k", hl.dsp.window.move({ direction = "up" }))
 hl.bind(secondMod .. " + j", hl.dsp.window.move({ direction = "down" }))
+
+hl.bind("Print", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
 
 -- Switch to a submap called `resize`.
 hl.bind("ALT + R", hl.dsp.submap("󰘖"))
@@ -107,14 +107,22 @@ hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- Scroll through existing workspaces with mainMod + scroll
-hl.bind(mainMod .. " + TAB", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd(ipc .. "plugin maddingo/hypr-layout-switcher:poller all cycle"))
 hl.bind(secondMod .. " + TAB", hl.dsp.focus({ workspace = "e-1" }))
 
+hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher hold"))
+hl.bind("ALT + SHIFT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher hold reverse"))
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
+-- Media keys
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
 -- hl.bind(
 -- 	"XF86AudioRaiseVolume",
 -- 	hl.dsp.exec_cmd("swayosd-client --output-volume +10 --max-volume 200"),
@@ -135,36 +143,36 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- 	hl.dsp.exec_cmd("swayosd-client --input-volume mute-toggle"),
 -- 	{ locked = true, repeating = true }
 -- )
-hl.bind(
-	"XF86AudioRaiseVolume",
-	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"),
-	{ locked = true, repeating = true }
-)
-hl.bind(
-	"XF86AudioLowerVolume",
-	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
-	{ locked = true, repeating = true }
-)
-hl.bind(
-	"XF86AudioMute",
-	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
-	{ locked = true, repeating = true }
-)
-hl.bind(
-	"XF86AudioMicMute",
-	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
-	{ locked = true, repeating = true }
-)
-
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness +10"), { locked = true, repeating = true })
-hl.bind(
-	"XF86MonBrightnessDown",
-	hl.dsp.exec_cmd("swayosd-client --brightness -10"),
-	{ locked = true, repeating = true }
-)
-
--- Requires playerctl
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("swayosd-client --playerctl next"), { locked = true })
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl previous"), { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
+-- hl.bind(
+-- 	"XF86AudioRaiseVolume",
+-- 	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"),
+-- 	{ locked = true, repeating = true }
+-- )
+-- hl.bind(
+-- 	"XF86AudioLowerVolume",
+-- 	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
+-- 	{ locked = true, repeating = true }
+-- )
+-- hl.bind(
+-- 	"XF86AudioMute",
+-- 	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+-- 	{ locked = true, repeating = true }
+-- )
+-- hl.bind(
+-- 	"XF86AudioMicMute",
+-- 	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
+-- 	{ locked = true, repeating = true }
+-- )
+--
+-- hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness +10"), { locked = true, repeating = true })
+-- hl.bind(
+-- 	"XF86MonBrightnessDown",
+-- 	hl.dsp.exec_cmd("swayosd-client --brightness -10"),
+-- 	{ locked = true, repeating = true }
+-- )
+--
+-- -- Requires playerctl
+-- hl.bind("XF86AudioNext", hl.dsp.exec_cmd("swayosd-client --playerctl next"), { locked = true })
+-- hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("swayosd-client --playerctl previous"), { locked = true })
+-- hl.bind("XF86AudioPause", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
+-- hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
